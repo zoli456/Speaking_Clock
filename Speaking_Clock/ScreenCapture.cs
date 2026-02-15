@@ -1,4 +1,6 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Diagnostics;
+using System.Drawing.Imaging;
+using Speaking_clock.Overlay;
 using Vanara.PInvoke;
 
 namespace Speaking_Clock;
@@ -18,8 +20,11 @@ public class ScreenCapture
     /// <param name="captureActiveWindow"></param>
     public static void CaptureScreen(bool captureActiveWindow)
     {
-        // Generate the unique file path
-        var filePath = Utils.GetOrCreateSpeakingClockPath();
+        if (Beallitasok.OverlayMode != "EXTERNAL" && Beallitasok.OverlayMode != "")
+        {
+            OverlayMessenger.SendRequestScreenshootAsync();
+            return;
+        }
 
         int width, height;
         Point topLeft;
@@ -66,7 +71,7 @@ public class ScreenCapture
         }
 
         // Save the captured image
-        SaveBitmap(hBitmap, filePath);
+        SaveBitmap(hBitmap, Utils.GetOrCreateSpeakingClockPath());
 
         // Release resources
         Gdi32.DeleteDC(hdcMemory);
@@ -78,9 +83,29 @@ public class ScreenCapture
     /// </summary>
     /// <param name="hBitmap"></param>
     /// <param name="filePath"></param>
-    private static void SaveBitmap(Gdi32.SafeHBITMAP hBitmap, string filePath)
+    internal static void SaveBitmap(Gdi32.SafeHBITMAP hBitmap, string filePath)
     {
+        Debug.WriteLine($"Writing bitmap to {filePath}");
         using var bitmap = Image.FromHbitmap(hBitmap.DangerousGetHandle());
+        var watermark = Beallitasok.ScreenCaptureSection["Vízjel"].StringValue.Trim();
+
+        if (!string.IsNullOrEmpty(watermark))
+        {
+            using var watermarkedImage = Utils.AddWatermark(bitmap, watermark);
+            watermarkedImage.Save(filePath, ImageFormat.Png);
+        }
+        else
+        {
+            bitmap.Save(filePath, ImageFormat.Png);
+        }
+    }
+
+    internal static void SaveBitmap(byte[] imageBytes, string filePath)
+    {
+        Debug.WriteLine($"Writing bytes to {filePath}");
+        using var ms = new MemoryStream(imageBytes);
+        using var bitmap = new Bitmap(ms);
+
         var watermark = Beallitasok.ScreenCaptureSection["Vízjel"].StringValue.Trim();
 
         if (!string.IsNullOrEmpty(watermark))

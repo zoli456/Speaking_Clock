@@ -253,7 +253,7 @@ public class LogoGuesser : CompositionWidgetBase
 
             if (!File.Exists(archivePath)) return;
 
-            using var archive = ArchiveFactory.Open(archivePath);
+            using var archive = ArchiveFactory.OpenArchive(archivePath);
             var entry = archive.Entries.FirstOrDefault(e =>
                 !e.IsDirectory && string.Equals(Path.GetFileName(e.Key), fileName, StringComparison.OrdinalIgnoreCase));
 

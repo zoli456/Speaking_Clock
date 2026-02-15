@@ -106,6 +106,7 @@ public partial class Beallitasok : Form
     internal static WeatherWidget weatherWidget;
     internal static bool FullScreenApplicationRunning;
     private static Process FullScreenApplicationProcess;
+    internal static string OverlayMode = "";
     private WidgetSetup _widgetForm;
     internal bool DefaultBrowserPlayingAudio;
     internal Timer? DelayedLoadTimer;
@@ -173,6 +174,7 @@ public partial class Beallitasok : Form
         OverlaytextBox.Text = OverlayMessenger.ConvertToMultiLine(ÁtfedésSection["Gombok"].StringValue);
         DonthookapiTextbox.Text = ÁtfedésSection["DontHookRendering"].StringValue.Trim();
         DontHookTextBox.Text = ÁtfedésSection["UseSimpleOverlay"].StringValue.Trim();
+        WatermarktextBox.Text = ScreenCaptureSection["Vízjel"].StringValue.Trim();
 
         try
         {
@@ -378,6 +380,7 @@ public partial class Beallitasok : Form
         CreateTask();
         ÁtfedésSection["Bekapcsolva"].BoolValue = OverlaycheckBox.Checked;
         ÁtfedésSection["Gombok"].StringValue = OverlayMessenger.ConvertToSingleLine(OverlaytextBox.Text);
+        ScreenCaptureSection["Vízjel"].StringValue = WatermarktextBox.Text.Trim();
 
         DonthookapiTextbox.Text = DonthookapiTextbox.Text.Trim();
         if (!DonthookapiTextbox.Text.Contains(";") && DonthookapiTextbox.Text.Length > 0)
@@ -757,18 +760,14 @@ public partial class Beallitasok : Form
     ///     Simulate a key press
     /// </summary>
     /// <param name="keyCode"></param>
-    internal static void SimulateRealKeyPress(byte keyCode)
+    internal static void SimulateRealKeyPress(User32.VK keyCode)
     {
-        // Simulate key down event
         User32.keybd_event(keyCode, 0, KeyeventfKeydown,
-            IntPtr.Zero); // Using IntPtr.Zero for the last argument
+            IntPtr.Zero);
 
-        // Wait for a small delay to simulate real key press duration
-        Thread.Sleep(50); // Adjust this delay as needed
-
-        // Simulate key up event
+        Thread.Sleep(50);
         User32.keybd_event(keyCode, 0, User32.KEYEVENTF.KEYEVENTF_KEYUP,
-            IntPtr.Zero); // Using IntPtr.Zero for the last argument
+            IntPtr.Zero);
     }
 
     internal static async Task<bool> UpdateWeatherData()

@@ -107,6 +107,8 @@
             OverlaycheckBox = new CheckBox();
             tabPage6 = new TabPage();
             RssUpdateTimer = new System.Windows.Forms.Timer(components);
+            label14 = new Label();
+            WatermarktextBox = new TextBox();
             TimerMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Refresh_button).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Volume_trackBar).BeginInit();
@@ -638,7 +640,7 @@
             // 
             DailyWallpaperBox.AutoSize = true;
             DailyWallpaperBox.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold);
-            DailyWallpaperBox.Location = new Point(4, 38);
+            DailyWallpaperBox.Location = new Point(4, 83);
             DailyWallpaperBox.Margin = new Padding(4, 3, 4, 3);
             DailyWallpaperBox.Name = "DailyWallpaperBox";
             DailyWallpaperBox.Size = new Size(120, 19);
@@ -691,7 +693,7 @@
             // 
             ScreenCapturecheckBox.AutoSize = true;
             ScreenCapturecheckBox.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold);
-            ScreenCapturecheckBox.Location = new Point(240, 38);
+            ScreenCapturecheckBox.Location = new Point(4, 48);
             ScreenCapturecheckBox.Margin = new Padding(4, 3, 4, 3);
             ScreenCapturecheckBox.Name = "ScreenCapturecheckBox";
             ScreenCapturecheckBox.Size = new Size(115, 19);
@@ -870,6 +872,8 @@
             // 
             // tabPage6
             // 
+            tabPage6.Controls.Add(WatermarktextBox);
+            tabPage6.Controls.Add(label14);
             tabPage6.Controls.Add(startup_checkbox);
             tabPage6.Controls.Add(DailyWallpaperBox);
             tabPage6.Controls.Add(ScreenCapturecheckBox);
@@ -886,6 +890,23 @@
             RssUpdateTimer.Enabled = true;
             RssUpdateTimer.Interval = 1200000;
             RssUpdateTimer.Tick += RssUpdateTimer_Tick;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            label14.Location = new Point(126, 49);
+            label14.Name = "label14";
+            label14.Size = new Size(46, 17);
+            label14.TabIndex = 41;
+            label14.Text = "Vízjel:";
+            // 
+            // WatermarktextBox
+            // 
+            WatermarktextBox.Location = new Point(178, 47);
+            WatermarktextBox.Name = "WatermarktextBox";
+            WatermarktextBox.Size = new Size(164, 23);
+            WatermarktextBox.TabIndex = 42;
             // 
             // Beallitasok
             // 
@@ -998,6 +1019,7 @@
         private TextBox DontHookTextBox;
         private Label label13;
         private TextBox DonthookapiTextbox;
+        private Label label14;
         private static Button button4;
         internal static ToolStripMenuItem _warnings;
         internal static Button SayItNowbutton;
@@ -1009,6 +1031,7 @@
         private static System.Windows.Forms.Timer szamlalo;
         private static CheckBox QuickMenucheckBox;
         private static Button Gmailbutton;
+        private TextBox WatermarktextBox;
     }
 }
 

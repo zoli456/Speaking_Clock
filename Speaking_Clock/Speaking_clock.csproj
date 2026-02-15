@@ -1066,17 +1066,17 @@ Discord: zolsana
 		<PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
 		<PackageReference Include="ManagedBass" Version="4.0.2" />
 		<PackageReference Include="ManagedBass.Mix" Version="4.0.2" />
-		<PackageReference Include="SharpCompress" Version="0.42.1" />
-		<PackageReference Include="sharpconfig" Version="3.2.9.1" />
+		<PackageReference Include="SharpCompress" Version="0.46.0" />
+		<PackageReference Include="sharpconfig" Version="4.0.0" />
 		<PackageReference Include="TaskScheduler" Version="2.12.2" />
 		<PackageReference Include="UI.for.WinForms.AllControls.Net90" Version="2025.2.520" />
-		<PackageReference Include="Vanara.PInvoke.CoreAudio" Version="4.2.1" />
-		<PackageReference Include="Vanara.PInvoke.DwmApi" Version="4.2.1" />
-		<PackageReference Include="Vanara.PInvoke.Shell32" Version="4.2.1" />
-		<PackageReference Include="Vanara.PInvoke.User32" Version="4.2.1" />
-		<PackageReference Include="Vortice.Direct2D1" Version="3.8.1" />
-		<PackageReference Include="Vortice.DirectComposition" Version="3.8.1" />
-		<PackageReference Include="Vortice.WinForms" Version="3.8.1" />
+		<PackageReference Include="Vanara.PInvoke.CoreAudio" Version="5.0.0" />
+		<PackageReference Include="Vanara.PInvoke.DwmApi" Version="5.0.0" />
+		<PackageReference Include="Vanara.PInvoke.Shell32" Version="5.0.0" />
+		<PackageReference Include="Vanara.PInvoke.User32" Version="5.0.0" />
+		<PackageReference Include="Vortice.Direct2D1" Version="3.8.2" />
+		<PackageReference Include="Vortice.DirectComposition" Version="3.8.2" />
+		<PackageReference Include="Vortice.WinForms" Version="3.8.2" />
 		<PackageReference Include="Vosk" Version="0.3.38" />
 	</ItemGroup>
 

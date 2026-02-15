@@ -26,7 +26,7 @@ internal class Utils
     /// </summary>
     /// <param name="key">Input character or key name.</param>
     /// <returns>Hex keycode, or <c>0x00</c> if not recognized.</returns>
-    internal static byte CharToHexKeyCode(string key)
+    internal static User32.VK CharToHexKeyCode(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
             return 0x00;
@@ -76,7 +76,7 @@ internal class Utils
             { "oem8", 0xDF }
         };
 
-        return charToKeyCodeMap.TryGetValue(key.Trim(), out var code) ? code : (byte)0x00;
+        return (User32.VK)(charToKeyCodeMap.TryGetValue(key.Trim(), out var code) ? code : (byte)0x00);
     }
 
     /// <summary>
@@ -713,8 +713,7 @@ internal class Utils
 
                 try
                 {
-                    // Open the ZIP archive with SharpCompress
-                    using (var archive = ZipArchive.Open(zipFilePath, new ReaderOptions { Password = password }))
+                    using (var archive = ZipArchive.OpenArchive(zipFilePath, new ReaderOptions { Password = password }))
                     {
                         foreach (var entry in archive.Entries)
                             if (!entry.IsDirectory)
@@ -724,7 +723,6 @@ internal class Utils
                                 // Ensure the directory exists
                                 Directory.CreateDirectory(Path.GetDirectoryName(destinationFilePath)!);
 
-                                // Extract the file
                                 entry.WriteToFile(destinationFilePath);
                                 Debug.WriteLine($"Extracted: {entry.Key}");
                             }
@@ -767,7 +765,6 @@ internal class Utils
 
         try
         {
-            // Derive a 32-byte (256-bit) key from the input key
             byte[] keyBytes;
             using (var sha256 = SHA256.Create())
             {
@@ -780,17 +777,16 @@ internal class Utils
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
 
-                // Generate a random IV
                 aes.GenerateIV();
                 var iv = aes.IV;
 
                 using (var inputFileStream = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read))
                 using (var outputFileStream = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write))
                 {
-                    // Write the IV at the start of the output file
+
                     outputFileStream.Write(iv, 0, iv.Length);
 
-                    // Encrypt the input file content
+
                     using (var encryptor = aes.CreateEncryptor())
                     using (var cryptoStream = new CryptoStream(outputFileStream, encryptor, CryptoStreamMode.Write))
                     {
@@ -823,7 +819,7 @@ internal class Utils
 
         try
         {
-            // Derive a 32-byte (256-bit) key from the input key
+
             byte[] keyBytes;
             using (var sha256 = SHA256.Create())
             {
@@ -832,7 +828,7 @@ internal class Utils
 
             using (var inputFileStream = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read))
             {
-                // Read the IV from the start of the input file
+
                 var iv = new byte[16];
                 inputFileStream.Read(iv, 0, iv.Length);
 
@@ -843,7 +839,7 @@ internal class Utils
                     aes.Mode = CipherMode.CBC;
                     aes.Padding = PaddingMode.PKCS7;
 
-                    // Decrypt the file content
+
                     using (var decryptor = aes.CreateDecryptor())
                     using (var cryptoStream = new CryptoStream(inputFileStream, decryptor, CryptoStreamMode.Read))
                     using (var memoryStream = new MemoryStream())
@@ -891,9 +887,7 @@ internal class Utils
         string password)
     {
         var filesInMemory = new Dictionary<string, MemoryStream>();
-
-        // Open the zip archive
-        using var archive = ZipArchive.Open(zipFilePath, new ReaderOptions
+        using var archive = ZipArchive.OpenArchive(zipFilePath, new ReaderOptions
         {
             Password = password,
             ArchiveEncoding = new ArchiveEncoding
@@ -901,117 +895,21 @@ internal class Utils
                 Default = Encoding.Latin1
             }
         });
-        // Iterate through each entry in the zip file
+
         foreach (var entry in archive.Entries)
         {
-            // Check if the entry is not a directory and is encrypted
+
             if (entry.IsDirectory || !entry.IsEncrypted) continue;
             var memoryStream = new MemoryStream();
-            // Write the entry into memory stream
+
             entry.WriteTo(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
-            // Store in dictionary with entry key as filename
+
             filesInMemory.Add(entry.Key, memoryStream);
         }
 
         return filesInMemory;
-    }
-
-    /// <summary>
-    ///     Minimizes game process window, opens webpage in default browser,
-    ///     waits until the browser closes, restores and focuses the game again.
-    /// </summary>
-    public static void OpenWebpageAndReturn(string url, Process gameProcess)
-    {
-        Task.Run(async () =>
-        {
-            try
-            {
-                var gameHwnd = new HWND(gameProcess.MainWindowHandle);
-
-                // -------------------------
-                // Minimize game window
-                // -------------------------
-                User32.ShowWindow(gameHwnd, ShowWindowCommand.SW_MINIMIZE);
-
-                // -------------------------
-                // Get the default browser exe name
-                // -------------------------
-                var defaultBrowser = GetDefaultBrowser();
-                var exeName = Path.GetFileNameWithoutExtension(defaultBrowser);
-
-                // -------------------------
-                // Snapshot existing browser windows BEFORE opening URL
-                // -------------------------
-                var before = GetBrowserWindows(exeName);
-
-                // -------------------------
-                // Open URL (shell)
-                // -------------------------
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
-
-                // -------------------------
-                // Wait for new browser window to show up
-                // -------------------------
-                var newBrowserWindow = IntPtr.Zero;
-
-                for (var i = 0; i < 200; i++) // 10 seconds
-                {
-                    var after = GetBrowserWindows(exeName);
-
-                    // New windows = after - before
-                    newBrowserWindow = after.Except(before).FirstOrDefault();
-
-                    if (newBrowserWindow != IntPtr.Zero)
-                        break;
-
-                    await Task.Delay(50);
-                }
-
-                // If no new window → browser was already running → skip refocus
-                if (newBrowserWindow == IntPtr.Zero)
-                    return;
-
-                var browserHwnd = new HWND(newBrowserWindow);
-
-                // -------------------------
-                // Focus browser
-                // -------------------------
-                User32.ShowWindow(browserHwnd, ShowWindowCommand.SW_RESTORE);
-                User32.SetForegroundWindow(browserHwnd);
-
-                // -------------------------
-                // Wait until user closes the browser window
-                // -------------------------
-                while (User32.IsWindow(newBrowserWindow))
-                    await Task.Delay(100);
-
-                // -------------------------
-                // Restore game
-                // -------------------------
-                User32.ShowWindow(gameHwnd, ShowWindowCommand.SW_RESTORE);
-                User32.SetForegroundWindow(gameHwnd);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Error in OpenWebpageAndReturn: " + ex);
-            }
-        });
-    }
-
-    private static List<IntPtr> GetBrowserWindows(string exeName)
-    {
-        var list = new List<IntPtr>();
-        foreach (var p in Process.GetProcessesByName(exeName))
-            if (p.MainWindowHandle != IntPtr.Zero)
-                list.Add(p.MainWindowHandle);
-
-        return list;
     }
 }
 
@@ -1037,10 +935,7 @@ internal class CoInitializeScope : IDisposable
     {
         if (!disposedValue)
         {
-            // No managed resources to dispose in this class (disposing = true)
-
-            // Free unmanaged resources (COM context)
-            if (hr.Succeeded) // Only call CoUninitialize if CoInitializeEx succeeded
+            if (hr.Succeeded)
                 CoUninitialize();
             disposedValue = true;
         }

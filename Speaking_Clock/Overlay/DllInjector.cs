@@ -53,7 +53,7 @@ public static class DllInjector
         Beallitasok.DeactivateLegacyOverlay();
         Debug.WriteLine($"{CurrentProcess.ProcessName} exited, resetting DLL injection state.");
         CurrentProcess = null;
-
+        Beallitasok.OverlayMode = "";
         if (Beallitasok.PlayingRadio)
             if (Beallitasok.radioPlayerWidget == null || Beallitasok.radioPlayerWidget.IsDisposed)
                 OnlineRadioPlayer.Stop();

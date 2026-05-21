@@ -38,7 +38,7 @@ public partial class FullScreenMenu : RadForm
     }
 
     /* protected override void WndProc(ref Message m)
-     { const int waInactive = 0;
+     { static readonly int waInactive = 0;
          if (m.Msg == (int)WindowMessage.WM_MOUSEACTIVATE)
          {
              m.Result = (IntPtr)WindowMessage.WM_NCACTIVATE;

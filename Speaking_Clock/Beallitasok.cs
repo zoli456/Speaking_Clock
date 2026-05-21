@@ -25,7 +25,7 @@ namespace Speaking_Clock;
 public partial class Beallitasok : Form
 {
     // Constants for key event flags
-    private const User32.KEYEVENTF KeyeventfKeydown = 0; // Simulate key down event
+    private static readonly User32.KEYEVENTF KeyeventfKeydown = 0; // Simulate key down event
 
     internal static readonly string BasePath = Path.GetDirectoryName(Application.ExecutablePath);
     internal static string SetttingsFileName = "settings.ini";
@@ -72,6 +72,7 @@ public partial class Beallitasok : Form
     internal static Flagguesser flagguesserForm;
     internal static QuizWidget quizForm;
     internal static LogoGuesser logoGuesserForm;
+    internal static NotesWidget noteswidget;
     internal static MemoryStream AlarmSound;
     internal static MemoryStream NotificationSound;
     internal static bool Lejátszás;
@@ -84,7 +85,7 @@ public partial class Beallitasok : Form
     internal static string VoskModel = "vosk-model-small-en-us-0.15";
     internal static List<string> RadioNames = new();
     internal static List<string> RandioUrLs = new();
-    internal static string ZipPassword = Secrets.ZipPassword;
+    internal static string ZipPassword = Secrets.SoundArchivePassword;
     internal static string RadioDataKey = Secrets.RadioDataKey;
 
     internal static string UserAgent =
@@ -870,7 +871,7 @@ public partial class Beallitasok : Form
         try
         {
             var current = weatherData.RootElement.GetProperty("v3-wx-observations-current");
-            var forecast = weatherData.RootElement.GetProperty("v3-wx-forecast-daily-3day").GetProperty("daypart")[0];
+            var forecast = weatherData.RootElement.GetProperty("v3-wx-forecast-daily-7day").GetProperty("daypart")[0];
 
             var dataindex = 0;
             for (var i = 0; i < forecast.GetProperty("daypartName").GetArrayLength(); i++)
@@ -1297,6 +1298,13 @@ public partial class Beallitasok : Form
                 new LogoGuesser(WidgetSection["Logo_X"].IntValue, WidgetSection["Logo_Y"].IntValue);
         }
 
+        if (WidgetSection["Notes_Bekapcsolva"].BoolValue)
+        {
+            Debug.WriteLine("Notes bekapcsolva!");
+            noteswidget =
+                new NotesWidget(WidgetSection["Notes_X"].IntValue, WidgetSection["Notes_Y"].IntValue);
+        }
+
         if (BeszédSection["Bekapcsolva"].BoolValue)
             KovetkezoBeszed = DateTime.Now.AddMinutes(BeszédSection["Gyakoriság"].IntValue);
         TrayIcon.Visible = true;
@@ -1435,12 +1443,12 @@ public partial class Beallitasok : Form
 
     private void játékJavítás1TelepítésToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Utils.ExtractPasswordProtectedZip($"{BasePath}\\Fájlok\\GameFix1", "Amjgw9LRXWsXyu5Sw7YE");
+        Utils.ExtractPasswordProtectedZip($"{BasePath}\\Fájlok\\GameFix1", Secrets.ZipArchivePassword);
     }
 
     private void játékJavítás2TelepítésToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Utils.ExtractPasswordProtectedZip($"{BasePath}\\Fájlok\\GameFix2", "Amjgw9LRXWsXyu5Sw7YE");
+        Utils.ExtractPasswordProtectedZip($"{BasePath}\\Fájlok\\GameFix2", Secrets.ZipArchivePassword);
     }
 
     private void winrarTelepítéseToolStripMenuItem_Click(object sender, EventArgs e)

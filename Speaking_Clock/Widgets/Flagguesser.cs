@@ -48,9 +48,9 @@ public class CountryData
 
 public class Flagguesser : CompositionWidgetBase
 {
-    private const int NumOptions = 4;
-    private const float MinimizeButtonSize = 30f;
-    private const float MinimizeButtonPadding = 5f;
+    private static readonly int NumOptions = 4;
+    private static readonly float MinimizeButtonSize = 30f;
+    private static readonly float MinimizeButtonPadding = 5f;
     private readonly List<CountryData> _currentOptions = new();
     private readonly Timer _nextRoundTimer;
 
@@ -104,7 +104,7 @@ public class Flagguesser : CompositionWidgetBase
 
         CreateDeviceIndependentResources();
 
-        _nextRoundTimer = new Timer { Interval = 5000 };
+        _nextRoundTimer = new Timer { Interval = 4000 };
         _nextRoundTimer.Tick += (s, e) =>
         {
             _nextRoundTimer.Stop();
@@ -404,7 +404,6 @@ public class Flagguesser : CompositionWidgetBase
             // When not minimized, only allow dragging if clicking on flag area
             if (e.Button == MouseButtons.Left && Beallitasok.RSS_Reader_Section["Húzás"].BoolValue)
             {
-                // Calculate flag area (you'll need to define this based on your drawing logic)
                 var flagRect = GetCurrentFlagRect();
                 if (flagRect.Contains(e.Location))
                 {

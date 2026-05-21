@@ -87,7 +87,7 @@ public abstract class CompositionWidgetBase : RenderForm
 
     private void InitializeDirectX()
     {
-        // 1. Create D3D11 Device
+        // Create D3D11 Device
         ID3D11Device tempDevice;
         D3D11.D3D11CreateDevice(
             null,
@@ -101,14 +101,14 @@ public abstract class CompositionWidgetBase : RenderForm
         _d3dContext = _d3dDevice.ImmediateContext;
         tempDevice.Dispose();
 
-        // 2. Create DXGI Objects
+        // Create DXGI Objects
         using var dxgiDevice = _d3dDevice.QueryInterface<IDXGIDevice>();
 
-        // 3. Create D2D Device
+        // Create D2D Device
         _d2dDevice = _d2dFactory.CreateDevice(dxgiDevice);
         _d2dContext = _d2dDevice.CreateDeviceContext(DeviceContextOptions.None);
 
-        // 4. Create Swap Chain
+        // Create Swap Chain
         using var dxgiAdapter = dxgiDevice.GetAdapter();
         using var dxgiFactory = dxgiAdapter.GetParent<IDXGIFactory2>();
 
@@ -128,10 +128,10 @@ public abstract class CompositionWidgetBase : RenderForm
 
         _swapChain = dxgiFactory.CreateSwapChainForComposition(_d3dDevice, swapChainDesc);
 
-        // 5. Link SwapChain to D2D Context
+        //  Link SwapChain to D2D Context
         CreateBitmapTarget();
 
-        // 6. Init DirectComposition
+        // Init DirectComposition
         DComp.DCompositionCreateDevice(dxgiDevice, out _compositionDevice);
 
         _compositionDevice.CreateTargetForHwnd(Handle, true, out _compositionTarget);
@@ -206,22 +206,10 @@ public abstract class CompositionWidgetBase : RenderForm
         }
     }
 
-    // --- Abstract/Virtual Methods for Children ---
-
-    /// <summary>
-    ///     Implement your drawing logic here.
-    ///     Use 'context' instead of creating your own RenderTarget.
-    /// </summary>
     protected abstract void DrawContent(ID2D1DeviceContext context);
 
-    /// <summary>
-    ///     Implement saving logic (e.g., ConfigParser.SaveToFile)
-    /// </summary>
     protected abstract void SavePosition(int x, int y);
 
-    /// <summary>
-    ///     Determine if dragging is allowed (check your specific config section)
-    /// </summary>
     protected virtual bool CanDrag()
     {
         return true;
@@ -262,7 +250,6 @@ public abstract class CompositionWidgetBase : RenderForm
         OnChildMouseUp(e); // Passthrough
     }
 
-    // Hooks for child classes if they need raw input events
     protected virtual void OnChildMouseDown(MouseEventArgs e)
     {
     }

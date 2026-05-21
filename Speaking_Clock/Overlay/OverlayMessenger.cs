@@ -12,9 +12,9 @@ namespace Speaking_clock.Overlay;
 
 internal class OverlayMessenger
 {
-    private const string PipeName = "ClockOverlayPipe";
-    private const char LINE_SEPARATOR = ';';
-    private const char PART_SEPARATOR = '|';
+    private static readonly string PipeName = "ClockOverlayPipe";
+    private static readonly char LINE_SEPARATOR = ';';
+    private static readonly char PART_SEPARATOR = '|';
 
     private static NamedPipeServerStream pipe;
     private static StreamReader reader;
@@ -490,11 +490,11 @@ internal class OverlayMessenger
         uint nDefaultTimeOut,
         ref SECURITY_ATTRIBUTES securityAttributes);
 
-    private const uint PIPE_ACCESS_DUPLEX = 0x00000003;
-    private const uint FILE_FLAG_OVERLAPPED = 0x40000000;
-    private const uint PIPE_TYPE_BYTE = 0x00000000;
-    private const uint PIPE_READMODE_BYTE = 0x00000000;
-    private const uint PIPE_WAIT = 0x00000000;
+    private static readonly uint PIPE_ACCESS_DUPLEX = 0x00000003;
+    private static readonly uint FILE_FLAG_OVERLAPPED = 0x40000000;
+    private static readonly uint PIPE_TYPE_BYTE = 0x00000000;
+    private static readonly uint PIPE_READMODE_BYTE = 0x00000000;
+    private static readonly uint PIPE_WAIT = 0x00000000;
 
     #endregion
 }

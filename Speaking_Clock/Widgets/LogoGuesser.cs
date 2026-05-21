@@ -27,8 +27,8 @@ public class LogoData
 
 public class LogoGuesser : CompositionWidgetBase
 {
-    private const float MinimizeButtonSize = 30f;
-    private const float MinimizeButtonPadding = 5f;
+    private static readonly float MinimizeButtonSize = 30f;
+    private static readonly float MinimizeButtonPadding = 5f;
     private readonly Timer _nextRoundTimer;
     private readonly Random _random = new((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
     private readonly IWICImagingFactory _wicFactory;

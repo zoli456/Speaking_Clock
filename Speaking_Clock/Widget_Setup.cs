@@ -585,4 +585,21 @@ public partial class WidgetSetup : Form
         Focus();
         initalized = true;
     }
+
+    private void NotescheckBox_CheckedChanged(object sender, EventArgs e)
+    {
+        if (!initalized) return;
+        Debug.WriteLine($"Notes: {LogocheckBox.Checked}");
+        Beallitasok.WidgetSection["Notes_Bekapcsolva"].BoolValue = NotescheckBox.Checked;
+        Beallitasok.ConfigParser.SaveToFile($"{Beallitasok.BasePath}\\{Beallitasok.SetttingsFileName}");
+        if (Beallitasok.WidgetSection["Notes_Bekapcsolva"].BoolValue &&
+            (Beallitasok.noteswidget == null || Beallitasok.noteswidget.IsDisposed))
+            Beallitasok.noteswidget = new NotesWidget(Beallitasok.WidgetSection["Notes_X"].IntValue,
+                Beallitasok.WidgetSection["Notes_Y"].IntValue);
+        else
+            Beallitasok.noteswidget?.Dispose();
+        initalized = false;
+        Focus();
+        initalized = true;
+    }
 }

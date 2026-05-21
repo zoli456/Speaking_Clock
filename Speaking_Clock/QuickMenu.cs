@@ -195,7 +195,7 @@ internal partial class QuickMenu : RadForm
     // Optionally handle system key interference
     /* protected override void WndProc(ref Message m)
      {
-         const int waInactive = 0;
+         static readonly int waInactive = 0;
          if (m.Msg == (int)User32.WindowMessage.WM_MOUSEACTIVATE)
          {
              m.Result = (IntPtr)User32.WindowMessage.WM_NCACTIVATE;

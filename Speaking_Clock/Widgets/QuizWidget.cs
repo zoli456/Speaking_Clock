@@ -23,9 +23,9 @@ public class QuizItem
 
 public class QuizWidget : CompositionWidgetBase
 {
-    private const int NumOptions = 4;
-    private const float MinimizeButtonSize = 30f;
-    private const float MinimizeButtonPadding = 5f;
+    private static readonly int NumOptions = 4;
+    private static readonly float MinimizeButtonSize = 30f;
+    private static readonly float MinimizeButtonPadding = 5f;
     private readonly List<string> _currentOptionTexts = new();
     private readonly Timer _nextRoundTimer;
 
@@ -255,10 +255,8 @@ public class QuizWidget : CompositionWidgetBase
         var cursorClientPos = PointToClient(Cursor.Position);
 
         if (_isMinimized)
-            // Original logic: Right click to drag minimized
             return MouseButtons == MouseButtons.Right;
 
-        // Original logic: Drag on specific non-interactive areas
         // We can't drag if we are clicking buttons
         if (_minimizeButtonRect.Contains(cursorClientPos)) return false;
 
@@ -268,7 +266,7 @@ public class QuizWidget : CompositionWidgetBase
                 if (_optionRects[i].Contains(cursorClientPos))
                     return false;
 
-        // Check if inside draggable areas (top area or question area)
+        // Check if inside draggable areas
         var draggableAreaTop = MinimizeButtonSize + MinimizeButtonPadding * 2;
         var draggableHeight = Height * 0.25f + 30f + 10f;
         var questionAreaRect = GetQuestionAreaRect();
@@ -281,7 +279,6 @@ public class QuizWidget : CompositionWidgetBase
 
     protected override void OnChildMouseUp(MouseEventArgs e)
     {
-        // Handle interactions (Clicks that are NOT drags)
         if (_isMinimized)
         {
             if (e.Button == MouseButtons.Left && _startButtonRect.Contains(e.X, e.Y)) ExpandToFullView();
@@ -393,7 +390,6 @@ public class QuizWidget : CompositionWidgetBase
         _isMinimized = false;
         Width = 420;
         Height = 550;
-        // Resizing logic handled by Base.OnResize -> SwapChain resize
         if (_allQuestions == null) LoadQuizDataAsync();
         else StartNewRound();
     }

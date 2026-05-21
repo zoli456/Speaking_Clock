@@ -15,8 +15,8 @@ namespace Speaking_Clock;
 
 public class GmailMailChecker
 {
-    private const string ApplicationName = "Beszelo Ora";
-    private const string EncryptedTokenFilePath = "UserData";
+    private static readonly string ApplicationName = "Beszelo Ora";
+    private static readonly string EncryptedTokenFilePath = "UserData";
     private static readonly string[] Scopes = { GmailService.Scope.GmailReadonly };
     private static GmailService _gmailService;
     private static UserCredential _credential;

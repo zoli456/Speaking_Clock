@@ -10,8 +10,7 @@ using Vortice.Direct2D1;
 using Vortice.DirectWrite;
 using Vortice.Mathematics;
 using Vortice.WIC;
-// Keep for GraphicsPath if strictly needed, but D2D uses Geometry
-// For RenderForm if needed elsewhere, though base covers it
+
 using BitmapInterpolationMode = Vortice.Direct2D1.BitmapInterpolationMode;
 using Color = System.Drawing.Color;
 using FontStyle = Vortice.DirectWrite.FontStyle;
@@ -19,7 +18,6 @@ using Size = System.Drawing.Size;
 
 namespace Speaking_clock.Widgets;
 
-// Keep Data Classes as is
 public class DisplayWeatherData
 {
     public string DayName { get; set; } = "Friday";
@@ -58,14 +56,14 @@ public class ForecastDayData
 
 public class WeatherWidget : CompositionWidgetBase
 {
-    private const string IconBasePath = "Assets/WeatherIcons/";
-    private const string MoonBasePath = "Assets/MoonIcons/";
-    private const string PlaceholderWeatherIconFilename = "placeholder_weather.png";
-    private const string PlaceholderMoonIconFilename = "placeholder_moon.png";
+    private static readonly string IconBasePath = "Assets/WeatherIcons/";
+    private static readonly string MoonBasePath = "Assets/MoonIcons/";
+    private static readonly string PlaceholderWeatherIconFilename = "placeholder_weather.png";
+    private static readonly string PlaceholderMoonIconFilename = "placeholder_moon.png";
 
-    private const float GlobalPadding = 10f;
-    private const float SeparatorThickness = 1f;
-    private const float CornerRadius = 15.0f;
+    private static readonly float GlobalPadding = 10f;
+    private static readonly float SeparatorThickness = 1f;
+    private static readonly float CornerRadius = 15.0f;
 
     private readonly SizeI _detailsMoonIconSize = new(80, 80);
     private readonly SizeI _forecastDayIconSize = new(125, 75);
@@ -101,7 +99,7 @@ public class WeatherWidget : CompositionWidgetBase
 
     // Brushes
     private ID2D1SolidColorBrush? _textBrush;
-    private PrivateFontCollection? customFonts; // Helper if needed for System.Drawing fallback
+    private PrivateFontCollection? customFonts;
 
     public WeatherWidget(int startX, int startY, int days)
         : base(startX, startY, 270, 500) // Initialize with default size, will resize later
@@ -347,13 +345,11 @@ public class WeatherWidget : CompositionWidgetBase
         if (_textBrush == null) CreateDeviceDependentResources();
         if (_textBrush == null || _backgroundBrush == null) return; // Safety check
 
-        // 1. Draw Background (Rounded Rectangle)
-        // In DirectComposition, the "Window" is a transparent quad. We must draw the background shape manually.
         var bgRect = new Rect(0, 0, ClientSize.Width, ClientSize.Height);
         var roundedBg = new RoundedRectangle((RectangleF)bgRect, CornerRadius, CornerRadius);
         context.FillRoundedRectangle(roundedBg, _backgroundBrush);
 
-        // 2. Draw Content
+        // Draw Content
         float currentY = 0;
         DrawMainWeatherArea(context, new Rect(0, currentY, ClientSize.Width, ClientSize.Height), ref currentY);
         DrawForecastArea(context, new Rect(0, currentY, ClientSize.Width, ClientSize.Height - currentY), ref currentY);
@@ -697,7 +693,7 @@ public class WeatherWidget : CompositionWidgetBase
             Humidity = $"{currentObs.RelativeHumidity}%",
             Visibility = $"{currentObs.Visibility?.ToString("F2", CultureInfo.InvariantCulture) ?? "N/A"} km",
             Wind = $"{currentObs.WindSpeed} km/h {currentObs.WindDirectionCardinal}",
-            Pressure = $"{currentObs.PressureAltimeter} mb", // Removed trend for simplicity or parsing issues
+            Pressure = $"{currentObs.PressureAltimeter} mb", 
             DewPoint = $"{currentObs.TemperatureDewPoint}°",
             UvIndex = $"{currentObs.UvIndex} ({currentObs.UvDescription})",
             Sunrise = sunriseTime.ToString("H:mm"),
@@ -907,7 +903,6 @@ public class WeatherWidget : CompositionWidgetBase
         if (ClientSize.Height == newHeight) return;
 
         ClientSize = new Size(ClientSize.Width, newHeight);
-        // Base class OnResize will handle SwapChain resizing
     }
 
     private string MoonString(string name)

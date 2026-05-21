@@ -8,7 +8,7 @@ namespace Speaking_Clock;
 
 internal class SpeechRecognition
 {
-    private const User32.SetWindowPosFlags TopmostFlags = User32.SetWindowPosFlags.SWP_NOMOVE |
+    private static readonly User32.SetWindowPosFlags TopmostFlags = User32.SetWindowPosFlags.SWP_NOMOVE |
                                                           User32.SetWindowPosFlags.SWP_NOSIZE |
                                                           User32.SetWindowPosFlags.SWP_SHOWWINDOW;
 

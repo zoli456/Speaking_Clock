@@ -67,6 +67,7 @@
             AnalogClockcheckBox = new CheckBox();
             NamedaycheckBox = new CheckBox();
             groupBox3 = new GroupBox();
+            LogocheckBox = new CheckBox();
             QuizcheckBox = new CheckBox();
             FlagcheckBox = new CheckBox();
             MinesweepercheckBox = new CheckBox();
@@ -74,7 +75,7 @@
             DaystextBox = new TextBox();
             WeathercheckBox = new CheckBox();
             RadiocheckBox = new CheckBox();
-            LogocheckBox = new CheckBox();
+            NotescheckBox = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -498,6 +499,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(NotescheckBox);
             groupBox3.Controls.Add(LogocheckBox);
             groupBox3.Controls.Add(QuizcheckBox);
             groupBox3.Controls.Add(FlagcheckBox);
@@ -513,6 +515,18 @@
             groupBox3.TabIndex = 27;
             groupBox3.TabStop = false;
             groupBox3.Text = "Egyéb";
+            // 
+            // LogocheckBox
+            // 
+            LogocheckBox.AutoSize = true;
+            LogocheckBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            LogocheckBox.Location = new Point(463, 22);
+            LogocheckBox.Name = "LogocheckBox";
+            LogocheckBox.Size = new Size(65, 21);
+            LogocheckBox.TabIndex = 36;
+            LogocheckBox.Text = "Logók";
+            LogocheckBox.UseVisualStyleBackColor = true;
+            LogocheckBox.CheckedChanged += LogocheckBox_CheckedChanged;
             // 
             // QuizcheckBox
             // 
@@ -591,17 +605,17 @@
             RadiocheckBox.UseVisualStyleBackColor = true;
             RadiocheckBox.CheckedChanged += RadiocheckBox_CheckedChanged;
             // 
-            // LogocheckBox
+            // NotescheckBox
             // 
-            LogocheckBox.AutoSize = true;
-            LogocheckBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
-            LogocheckBox.Location = new Point(463, 22);
-            LogocheckBox.Name = "LogocheckBox";
-            LogocheckBox.Size = new Size(65, 21);
-            LogocheckBox.TabIndex = 36;
-            LogocheckBox.Text = "Logók";
-            LogocheckBox.UseVisualStyleBackColor = true;
-            LogocheckBox.CheckedChanged += LogocheckBox_CheckedChanged;
+            NotescheckBox.AutoSize = true;
+            NotescheckBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            NotescheckBox.Location = new Point(463, 60);
+            NotescheckBox.Name = "NotescheckBox";
+            NotescheckBox.Size = new Size(87, 21);
+            NotescheckBox.TabIndex = 37;
+            NotescheckBox.Text = "Jegyzetek";
+            NotescheckBox.UseVisualStyleBackColor = true;
+            NotescheckBox.CheckedChanged += NotescheckBox_CheckedChanged;
             // 
             // WidgetSetup
             // 
@@ -681,5 +695,6 @@
         private CheckBox FlagcheckBox;
         private CheckBox QuizcheckBox;
         private CheckBox LogocheckBox;
+        private CheckBox NotescheckBox;
     }
 }

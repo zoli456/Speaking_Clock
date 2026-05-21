@@ -49,8 +49,8 @@ Name: "vcredist"; Description: "Microsoft Visual C++ 2015–2022 futtatókörnye
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "G:\Programok\Speaking_Clock\Speaking_Clock\bin\x64\Release\net9.0-windows10.0.19041.0\protected\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\Programok\Speaking_Clock\Speaking_Clock\bin\x64\Release\net9.0-windows10.0.19041.0\protected\*"; DestDir: "{app}\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "G:\Programok\Speaking_Clock\Speaking_Clock\bin\x64\Release\net10.0-windows10.0.26100.0\protected\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "G:\Programok\Speaking_Clock\Speaking_Clock\bin\x64\Release\net10.0-windows10.0.26100.0\protected\*"; DestDir: "{app}\"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -65,7 +65,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 [Code]
 function InitializeSetup: Boolean;
 begin
-Dependency_AddDotNet90Desktop;
+Dependency_AddDotNet100Desktop;
   Result := True;
 end;
 

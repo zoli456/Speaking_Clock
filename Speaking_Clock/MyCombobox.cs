@@ -5,10 +5,10 @@ namespace Speaking_Clock;
 
 public class NewComboBox : ComboBox
 {
-    private const int GwlStyle = -16;
-    private const int EsLeft = 0x0000;
-    private const int EsCenter = 0x0001;
-    private const int EsRight = 0x0002;
+    private static readonly int GwlStyle = -16;
+    private static readonly int EsLeft = 0x0000;
+    private static readonly int EsCenter = 0x0001;
+    private static readonly int EsRight = 0x0002;
 
     public NewComboBox()
     {

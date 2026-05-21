@@ -14,7 +14,6 @@ using Timer = System.Timers.Timer;
 
 namespace Speaking_clock.Widgets;
 
-// --- Configuration Class (Unchanged) ---
 public class RssReaderSettings
 {
     public int FontSize { get; set; } = 18;
@@ -37,14 +36,13 @@ public class RssReaderSettings
     public int InitialY { get; set; } = 100;
 }
 
-// --- RSS Item Data Structure (Unchanged) ---
 public record RssFeedItem(string Title, string Link, string FullDescription);
 
 internal class RssReader : CompositionWidgetBase
 {
-    private const int ToolTipInitialDelay = 200;
-    private const int ToolTipAutoPopDelay = 7000;
-    private const int ToolTipReshowDelay = 200;
+    private static readonly int ToolTipInitialDelay = 200;
+    private static readonly int ToolTipAutoPopDelay = 7000;
+    private static readonly int ToolTipReshowDelay = 200;
     private static readonly HttpClient httpClient = new();
 
     // --- Configuration ---
@@ -321,11 +319,10 @@ internal class RssReader : CompositionWidgetBase
 
     protected override bool CanDrag()
     {
-        // 1. Check global setting
+        // Check global setting
         if (!Beallitasok.RSS_Reader_Section["Húzás"].BoolValue) return false;
 
-        // 2. Check if mouse is in the Header area.
-        // Since CanDrag is called inside OnMouseDown, MousePosition is valid.
+        // Check if mouse is in the Header area.
         var clientPoint = PointToClient(Cursor.Position);
         return clientPoint.Y <= _headerHeight;
     }
@@ -335,27 +332,39 @@ internal class RssReader : CompositionWidgetBase
         UpdateHoveredItem(e.Location);
     }
 
-    protected override void OnChildMouseUp(MouseEventArgs e)
+protected override void OnChildMouseUp(MouseEventArgs e)
+{
+    if (e.Button == MouseButtons.Left && _hoveredIndex != -1)
     {
-        // Logic from old OnWidgetMouseClick
-        if (e.Button == MouseButtons.Left && _hoveredIndex != -1)
+        var actualItemIndex = _scrollOffset + _hoveredIndex;
+
+        if (actualItemIndex >= 0 && actualItemIndex < _items.Count)
         {
-            var actualItemIndex = _scrollOffset + _hoveredIndex;
-            if (actualItemIndex >= 0 && actualItemIndex < _items.Count)
-                try
+            try
+            {
+                var link = _items[actualItemIndex].Link;
+
+                if (!string.IsNullOrWhiteSpace(link) &&
+                    Uri.IsWellFormedUriString(link, UriKind.Absolute))
                 {
-                    var link = _items[actualItemIndex].Link;
-                    if (!string.IsNullOrWhiteSpace(link) && Uri.IsWellFormedUriString(link, UriKind.Absolute))
-                        Process.Start(new ProcessStartInfo { FileName = link, UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = $"\"{link}\"",
+                        UseShellExecute = true,
+                        Verb = "open"
+                    });
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
     }
+}
 
-    protected override void OnMouseWheel(MouseEventArgs e)
+protected override void OnMouseWheel(MouseEventArgs e)
     {
         base.OnMouseWheel(e); // Always good practice
 
@@ -406,7 +415,7 @@ internal class RssReader : CompositionWidgetBase
         {
             _hoveredIndex = newHoveredIndex;
             if (_toolTip.GetToolTip(this) != tooltipText) _toolTip.SetToolTip(this, tooltipText);
-            Invalidate(); // Triggers DrawContent
+            Invalidate();
         }
     }
 

@@ -330,14 +330,13 @@ public class CalendarWidget : CompositionWidgetBase
 
         // Multiple offset draws to simulate a soft blur
         // The offsets and alpha combine to create a soft appearance.
-        // You can tweak the offsets and the shadow brush alpha to taste.
         context.DrawTextLayout(pos + new Vector2(1, 1), layout, _shadowBrush);
         context.DrawTextLayout(pos + new Vector2(2, 1), layout, _shadowBrush);
         context.DrawTextLayout(pos + new Vector2(1, 2), layout, _shadowBrush);
         // a very subtle extra layer for softness
         context.DrawTextLayout(pos + new Vector2(0.5f, 1.5f), layout, _shadowBrush);
 
-        // Finally draw the actual text on top
+        // Draw the actual text on top
         context.DrawTextLayout(pos, layout, textBrush);
     }
 
@@ -374,7 +373,7 @@ public class CalendarWidget : CompositionWidgetBase
 
     protected override void OnChildMouseUp(MouseEventArgs e)
     {
-        // Base handles drag finish logic
+        
     }
 
     protected override void OnMouseLeave(EventArgs e)
@@ -403,8 +402,6 @@ public class CalendarWidget : CompositionWidgetBase
         if (e.Delta > 0) NavigateMonth(-1);
         else if (e.Delta < 0) NavigateMonth(1);
     }
-
-    // --- Helper Logic (Unchanged mostly) ---
 
     private void NavigateMonth(int monthOffset)
     {
@@ -491,27 +488,27 @@ public class CalendarWidget : CompositionWidgetBase
 
     private static class CalendarLook
     {
-        public const int DefaultWidth = 380;
-        public const int DefaultHeight = 280;
-        public const float WidgetOpacity = 1;
+        public static readonly int DefaultWidth = 380;
+        public static readonly int DefaultHeight = 280;
+        public static readonly float WidgetOpacity = 1;
 
-        public const int ButtonRadius = 12;
-        public const int ButtonTopY = 10;
-        public const int ButtonHorizontalMargin = 10;
-        public const string PrevButtonSymbol = "<";
-        public const string NextButtonSymbol = ">";
-        public const int ButtonSymbolFontSize = 16;
+        public static readonly int ButtonRadius = 12;
+        public static readonly int ButtonTopY = 10;
+        public static readonly int ButtonHorizontalMargin = 10;
+        public static readonly string PrevButtonSymbol = "<";
+        public static readonly string NextButtonSymbol = ">";
+        public static readonly int ButtonSymbolFontSize = 16;
 
-        public const int MonthYearHeaderTextTop = 10;
-        public const int MonthYearHeaderTextHeight = 30;
+        public static readonly int MonthYearHeaderTextTop = 10;
+        public static readonly int MonthYearHeaderTextHeight = 30;
 
-        public const int DayNamesRowTop = MonthYearHeaderTextTop + MonthYearHeaderTextHeight + 5;
-        public const int DayColumnStartX = 15;
-        public const int DayCellWidth = (DefaultWidth - DayColumnStartX * 2 + 10) / 7;
-        public const int DayCellHeight = 28;
+        public static readonly int DayNamesRowTop = MonthYearHeaderTextTop + MonthYearHeaderTextHeight + 5;
+        public static readonly int DayColumnStartX = 15;
+        public static readonly int DayCellWidth = (DefaultWidth - DayColumnStartX * 2 + 10) / 7;
+        public static readonly int DayCellHeight = 28;
 
-        public const int NumbersGridYStart = DayNamesRowTop + DayCellHeight + 5;
-        public const int HeaderFontSize = 24;
-        public const int DayFontSize = 20;
+        public static readonly int NumbersGridYStart = DayNamesRowTop + DayCellHeight + 5;
+        public static readonly int HeaderFontSize = 24;
+        public static readonly int DayFontSize = 20;
     }
 }

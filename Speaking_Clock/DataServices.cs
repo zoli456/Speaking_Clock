@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using Speaking_clock;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json;
-using Speaking_clock;
+using System.Xml;
 using Vanara.PInvoke;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -13,7 +15,9 @@ public class DataServices
     private static readonly string CurrentApiUrl = "https://api.weatherapi.com/v1/current.json";
     private static readonly string ForcastApiUrl = "https://api.weatherapi.com/v1/forecast.json";
     private static readonly HttpClient HttpClient = new();
-    private static readonly string TtsApiBaseUrl = "https://api.flowery.pw/v1/tts/";
+    private static readonly string TtsApiBaseUrl = "https://api.flowery.pw";
+    private static readonly string UserAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
 
     /// <summary>
     ///     Get the weather data from the WeatherAPI.com API.
@@ -69,7 +73,7 @@ public class DataServices
     {
         try
         {
-            var audioData = await GetTtsFromApi(text);
+            var audioData = await GetTtsFromApiV2(text);
             if (audioData != null && audioData.Length > 0)
                 return audioData;
             Debug.WriteLine("No audio data received from the TTS API.");
@@ -87,19 +91,60 @@ public class DataServices
     /// </summary>
     /// <param name="text">The input text to convert to speech.</param>
     /// <returns></returns>
-    private static async Task<byte[]> GetTtsFromApi(string text)
+    private static async Task<byte[]?> GetTtsFromApiV2(string text)
     {
-        var apiUrl = $"{TtsApiBaseUrl}?text={Uri.EscapeDataString(text)}&voice=" +
-                     $"{(Beallitasok.BeszédSection["Hang"].StringValue.Contains("Noémi") ? "Noemi" : "Tamas")}&speed=0.9";
+        var url = $"{TtsApiBaseUrl}/v2/tts";
+        var voiceId = "ed2e0393-ecd2-5acd-aeca-27d923b7141f";
 
-        HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent",
-            Beallitasok.UserAgent);
+        string ssml;
+        var settings = new XmlWriterSettings
+        {
+            Encoding = Encoding.UTF8,
+            OmitXmlDeclaration = true,
+            Indent = false
+        };
 
-        var response = await HttpClient.GetAsync(apiUrl);
+        using (var stringWriter = new StringWriter())
+        using (var xmlWriter = XmlWriter.Create(stringWriter, settings))
+        {
+            xmlWriter.WriteStartElement("speak", "http://www.w3.org/2001/10/synthesis");
 
-        return response.IsSuccessStatusCode
-            ? await response.Content.ReadAsByteArrayAsync()
-            : null;
+            xmlWriter.WriteStartElement("voice");
+            xmlWriter.WriteAttributeString("name", voiceId);
+
+            xmlWriter.WriteStartElement("prosody");
+            xmlWriter.WriteAttributeString("rate", "slow");
+            xmlWriter.WriteAttributeString("volume", "+2dB");
+
+            xmlWriter.WriteString(text);
+
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.Flush();
+            ssml = stringWriter.ToString();
+        }
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, url);
+
+        // Audio format negotiation
+        request.Headers.TryAddWithoutValidation("Accept", "audio/mpeg");
+        request.Headers.TryAddWithoutValidation("User-Agent", UserAgent);
+
+        // SSML payload
+        request.Content = new StringContent(
+            ssml,
+            Encoding.UTF8,
+            "application/ssml+xml"
+        );
+
+        var response = await HttpClient.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        return await response.Content.ReadAsByteArrayAsync();
     }
 
     /// <summary>

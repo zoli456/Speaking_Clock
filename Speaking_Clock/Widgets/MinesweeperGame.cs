@@ -12,7 +12,6 @@ using RectangleF = System.Drawing.RectangleF;
 
 namespace Speaking_clock.Widgets;
 
-// Game Logic remains unchanged
 public enum GameState
 {
     NotStarted,
@@ -190,8 +189,8 @@ public class MinesweeperGame
 
 public class Minesweeper : CompositionWidgetBase
 {
-    private const float MinimizeButtonSize = 30f;
-    private const float MinimizeButtonPadding = 5f;
+    private static readonly float MinimizeButtonSize = 30f;
+    private static readonly float MinimizeButtonPadding = 5f;
     private readonly float _cellSize = 30.0f;
     private readonly int _cols;
     private readonly MinesweeperGame _game;
@@ -208,13 +207,11 @@ public class Minesweeper : CompositionWidgetBase
     private float _gridOffsetY;
     private ID2D1SolidColorBrush _hiddenCellBrush;
 
-    // Minimize/expand state
     private bool _isMinimized = true;
     private ID2D1SolidColorBrush _lineBrush;
     private ID2D1SolidColorBrush _minimizeButtonBrush;
     private RectangleF _minimizeButtonRect;
 
-    // Dragging state handled manually to support Right-Click drag logic
     private Point _mouseDownLocation;
 
     private ID2D1SolidColorBrush _newGameButtonBrush;
@@ -251,14 +248,11 @@ public class Minesweeper : CompositionWidgetBase
 
 
         Text = "Aknakereső 💣";
-        BackColor = Color.FromArgb(220, 220, 220); // Used for clear color logic
+        BackColor = Color.FromArgb(220, 220, 220); 
 
-        // Initialize text formats using the Factory from the base class
         CreateDeviceIndependentResources();
-
-        // Start minimized logic
         _isMinimized = true;
-        UpdateFormSize(); // This will set ClientSize, triggering base Resize logic
+        UpdateFormSize();
         UpdateStatusMessage();
     }
 
@@ -324,8 +318,6 @@ public class Minesweeper : CompositionWidgetBase
                 _newGameButtonHeight);
         }
     }
-
-    // Disable base generic dragging to use the specific Minesweeper logic
     protected override bool CanDrag()
     {
         return false;

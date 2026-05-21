@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -279,7 +279,11 @@ Discord: zolsana
 		<None Remove="Assets\Flags\zm.png" />
 		<None Remove="Assets\Flags\zw.png" />
 		<None Remove="Assets\logos\logo.dat" />
+		<None Remove="Assets\Notes\notepad_closed.png" />
+		<None Remove="Assets\Notes\notepad_open.png" />
 		<None Remove="countries.json" />
+		<None Remove="Fájlok\GameFix1" />
+		<None Remove="Fájlok\GameFix2" />
 		<None Remove="Fájlok\RadioStations.dat" />
 		<None Remove="Hangok\alarm.mp3" />
 		<None Remove="Hangok\notification.mp3" />
@@ -1040,7 +1044,31 @@ Discord: zolsana
 		<Content Include="Assets\logos\logo.dat">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Assets\Notes\notepad_closed.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\Notes\notepad_open.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libgcc_s_seh-1.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libstdc++-6.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libvosk.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libwinpthread-1.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Clock_icon.ico" />
+		<Content Include="Fájlok\GameFix1">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Fájlok\GameFix2">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Fájlok\RadioStations.dat">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
@@ -1066,17 +1094,17 @@ Discord: zolsana
 		<PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
 		<PackageReference Include="ManagedBass" Version="4.0.2" />
 		<PackageReference Include="ManagedBass.Mix" Version="4.0.2" />
-		<PackageReference Include="SharpCompress" Version="0.46.0" />
-		<PackageReference Include="sharpconfig" Version="4.0.0" />
+		<PackageReference Include="SharpCompress" Version="0.48.1" />
+		<PackageReference Include="sharpconfig" Version="4.1.0" />
 		<PackageReference Include="TaskScheduler" Version="2.12.2" />
 		<PackageReference Include="UI.for.WinForms.AllControls.Net90" Version="2025.2.520" />
-		<PackageReference Include="Vanara.PInvoke.CoreAudio" Version="5.0.0" />
-		<PackageReference Include="Vanara.PInvoke.DwmApi" Version="5.0.0" />
-		<PackageReference Include="Vanara.PInvoke.Shell32" Version="5.0.0" />
-		<PackageReference Include="Vanara.PInvoke.User32" Version="5.0.0" />
-		<PackageReference Include="Vortice.Direct2D1" Version="3.8.2" />
-		<PackageReference Include="Vortice.DirectComposition" Version="3.8.2" />
-		<PackageReference Include="Vortice.WinForms" Version="3.8.2" />
+		<PackageReference Include="Vanara.PInvoke.CoreAudio" Version="5.0.5" />
+		<PackageReference Include="Vanara.PInvoke.DwmApi" Version="5.0.5" />
+		<PackageReference Include="Vanara.PInvoke.Shell32" Version="5.0.5" />
+		<PackageReference Include="Vanara.PInvoke.User32" Version="5.0.5" />
+		<PackageReference Include="Vortice.Direct2D1" Version="3.8.3" />
+		<PackageReference Include="Vortice.DirectComposition" Version="3.8.3" />
+		<PackageReference Include="Vortice.WinForms" Version="3.8.3" />
 		<PackageReference Include="Vosk" Version="0.3.38" />
 	</ItemGroup>
 
@@ -1294,12 +1322,6 @@ Discord: zolsana
 		<None Update="DllInjector\SpeakingClockOverlayx86.dll">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Fájlok\GameFix1">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Fájlok\GameFix2">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 		<None Update="Hangok\[Magyar] Andrew">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -1314,6 +1336,22 @@ Discord: zolsana
 		</EmbeddedResource>
 		<EmbeddedResource Include="logos_final.json" />
 		<EmbeddedResource Include="QuestionData.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libgcc_s_seh-1.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libstdc++-6.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libvosk.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="C:\Users\zoli4\.nuget\packages\vosk\0.3.38\build\lib\win-x64\libwinpthread-1.dll" />
 	</ItemGroup>
 
 </Project>
